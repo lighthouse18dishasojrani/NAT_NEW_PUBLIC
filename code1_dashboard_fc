@@ -1,0 +1,15 @@
+digraph {
+	rankdir=TB
+	node [color=lightgrey fontname=Courier shape=box style=filled]
+	step0 [label="Step 1: Input parameters a_entity_code, a_tcode, a_tnature, and a_acc_year are passed into the procedure proc_nafhead."]
+	step1 [label="Step 2: a_entity_code is used to fetch yrbegdate and yrendate from acc_year_mast, which are then assigned to variables l_yrbegdate and L_YRENDDATE."]
+	step2 [label="Step 3: Cursor C_VR is opened, using a_entity_code as the filter. It retrieves ENTITY_CODE, TCODE, VRNO, NAFHEAD, and NAFIELD data from NAFHEAD_TRAN table."]
+	step3 [label="Step 4: For each iteration of the outer FOR loop (C_VR), SUM(AFIELD1) is calculated for each unique ENTITY_CODE, TCODE, and VRNO combination in itemTRAN_BODY table, using the retrieved values from C_VR. The result is assigned to variable L_SUM_AFIELD1."]
+	step4 [label="Step 5: For each iteration of the inner FOR loop (C2), AFIELD1 value is multiplied with I.NAFIELD, divided by L_SUM_AFIELD1, and rounded to decimal precision defined in variable L_DECIMAL. This calculated value is then added to running total L_TOTAL_AMT and assigned to variable L_SLNO."]
+	step5 [label="Step 6: After the inner loop completes, if the final L_TOTAL_AMT does not match I.NAFIELD, a NULL operation is performed."]
+	step0 -> step1
+	step1 -> step2
+	step2 -> step3
+	step3 -> step4
+	step4 -> step5
+}

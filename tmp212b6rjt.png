@@ -1,0 +1,15 @@
+digraph {
+	rankdir=TB
+	node [color=lightgrey fontname=Courier shape=box style=filled]
+	step0 [label="Step 1: Input parameter a_entity_code is passed into the procedure proc_nafhead."]
+	step1 [label="Step 2: The input parameters are used to get the YRBEGDATE and YRENDDATE from acc_year_mast table, which is stored in L_YRBEGDATE and L_YRENDDATE variables."]
+	step2 [label="Step 3: The C_VR cursor is executed, selecting data from NAFHEAD_TRAN table where ENTITY_CODE = a_ENTITY_CODE, TCODE = a_TCODE, VRNO = SUBSTR(a_ACC_YEAR, 1, 2), TNATURE = a_TNATURE. The result is stored in the C_VR cursor."]
+	step3 [label="Step 4: For each row in the C_VR cursor (I in C_VR LOOP), the procedure calculates L_SUM_AFIELD1 by selecting SUM(AFIELD1) from itemTRAN_BODY table where ENTITY_CODE = I.ENTITY_CODE, TCODE = I.TCODE, VRNO = I.VRNO."]
+	step4 [label="Step 5: The procedure then loops through the C2 cursor, which selects data from itemTRAN_BODY table where ENTITY_CODE = a_ENTITY_CODE, TCODE = a_TCODE, VRNO = I.VRNO. For each row in this loop (J in C2 LOOP), L_AMT is calculated as ROUND((I.NAFIELD * J.AFIELD1) / L_SUM_AFIELD1, L_DECIMAL). The total amount is then updated with the new value."]
+	step5 [label="Step 6: The procedure continues to accumulate the total amount and SLNO until it has processed all rows in the C_VR cursor."]
+	step0 -> step1
+	step1 -> step2
+	step2 -> step3
+	step3 -> step4
+	step4 -> step5
+}

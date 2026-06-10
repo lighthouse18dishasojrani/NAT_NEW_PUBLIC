@@ -1,0 +1,9 @@
+digraph {
+	rankdir=TB
+	node [shape=box]
+	step0 [label="1. `digit` is calculated by taking the remainder of `temp` divided by 10 (i.e., extracting the last digit of the number)."]
+	step1 [label="2. `rev` is updated by multiplying its current value by 10 and adding the extracted digit. This effectively adds the digit to the reverse of the number."]
+	step2 [label="3. `temp` is updated by performing integer division of itself by 10, effectively removing the last digit."]
+	step0 -> step1
+	step1 -> step2
+}

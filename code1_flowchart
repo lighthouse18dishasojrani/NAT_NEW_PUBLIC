@@ -1,0 +1,13 @@
+digraph {
+	rankdir=TB
+	node [color=lightgrey fontname=Courier shape=box style=filled]
+	step0 [label="Step 1: Input parameter a_entity_code is passed into procedure proc_nafhead, which uses it to fetch YRBEGDATE and YRENDATE from acc_year_mast"]
+	step1 [label="Step 2: Procedure proc_nafhead uses the fetched YRBEGDATE and YRENDATE to filter the results of CURSOR C_P and populate variables L_YRBEGDATE and L_YRENDDATE"]
+	step2 [label="Step 3: For each row in CURSOR C_VR, procedure proc_nafhead calculates SUM(AFIELD1) from itemTRAN_BODY for the corresponding entity_code, tcode, and vrno, and stores it in variable L_SUM_AFIELD1"]
+	step3 [label="Step 4: For each row in CURSOR C2, procedure proc_nafhead calculates the calculated AFIELD1 value by multiplying NAFIELD with AFIELD1 and dividing by L_SUM_AFIELD1, rounding to decimal precision L_DECIMAL, and then adds it to the running total L_TOTAL_AMT"]
+	step4 [label="Step 5: The final calculated L_TOTAL_AMT is compared with I.NAFIELD, and if they are not equal, procedure proc_nafhead does nothing (NULL)"]
+	step0 -> step1
+	step1 -> step2
+	step2 -> step3
+	step3 -> step4
+}

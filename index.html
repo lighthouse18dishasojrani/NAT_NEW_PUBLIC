@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PL/SQL Analyzer Enterprise</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { background:#f6f8fa; font-family:Inter,sans-serif; color:#23272f; margin:0; }
+    .container { max-width:1100px; margin:40px auto; background:#fff; border-radius:8px; box-shadow:0 8px 40px #aaa3; padding:32px; }
+    h2 { color:#4338ca; margin-top:0;}
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:2rem;}
+    textarea { width:100%; min-height:180px; font-size:1rem; font-family:monospace; border-radius:4px; border:1px solid #ccc; padding:10px; margin-bottom:8px;}
+    .btn { background: #6366f1; color:#fff; border:none; border-radius:4px; padding:10px 20px; font-size:1rem; cursor:pointer;}
+    .btn-secondary { background:#06b6d4;}
+    .panel { background:#f2f4fc; border-radius:6px; padding:18px; margin-top:22px;}
+    .label { font-weight:600; color:#6366f1; margin-bottom:4px; font-size:16px;}
+    .code { background:#fff; border-radius:4px; font-family:monospace; padding:6px 9px; }
+    .added { background:rgba(34,197,94,0.18); padding:0 2px; border-radius:4px;}
+    .removed { background:rgba(239,68,68,0.18); padding:0 2px; border-radius:4px; text-decoration:line-through;}
+    .hidden {display:none;}
+    #open-result-link { float:right; margin-left:8px; }
+    @media (max-width:800px) { .form-row{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>PL/SQL Code Compare & Highlight (Enterprise Edition)</h2>
+    <form id="compareForm">
+      <div class="form-row">
+        <div>
+          <div class="label">Original Code (code1)</div>
+          <textarea id="code-orig" required placeholder="Paste original PL/SQL code here..."></textarea>
+        </div>
+        <div>
+          <div class="label">Modified Code (code2)</div>
+          <textarea id="code-mod" required placeholder="Paste modified PL/SQL code here..."></textarea>
+        </div>
+      </div>
+      <div>
+        <button class="btn" type="submit">Compare & Analyze</button>
+        <button class="btn btn-secondary" type="button" onclick="clearFields()">Clear Fields</button>
+      </div>
+    </form>
+    <div id="compare-results" class="panel hidden">
+      <button class="btn" id="open-result-link" style="display:none;">Open Result in New Tab</button>
+      <div id="compare-output"></div>
+    </div>
+  </div>
+  <script>
+    function clearFields(){
+      document.getElementById('code-orig').value = '';
+      document.getElementById('code-mod').value = '';
+      document.getElementById('compare-results').classList.add('hidden');
+      document.getElementById('compare-output').innerHTML = '';
+      document.getElementById('open-result-link').style.display = 'none';
+    }
+    function applyCompare(p){
+      document.getElementById('code-orig').value = p.code1 || '';
+      document.getElementById('code-mod').value = p.code2 || '';
+      document.getElementById('compare-results').classList.remove('hidden');
+      const a = p.analysis || {};
+      document.getElementById('compare-output').innerHTML = `
+        <div class="panel"><div class="label">Summary</div><pre class="code">${a?.diff_analysis?.summary||''}</pre></div>
+        <div class="panel"><div class="label">Visual Diff</div><div class="code" style="white-space:pre-line">${a?.diff_analysis?.mod_highlight_html||''}</div></div>
+        <div class="panel"><div class="label">Business Impact</div><pre class="code">${a?.business_impact?.impact||''}</pre></div>
+        <div class="panel"><div class="label">Test Cases</div><pre class="code">${a?.affected_test_cases?.test_cases||''}</pre></div>
+        <div class="panel"><div class="label">Security - Original</div><pre class="code">${a?.security_analysis?.code1_security||''}</pre>
+        <div class="label" style="margin-top:8px">Security - Modified</div><pre class="code">${a?.security_analysis?.code2_security||''}</pre></div>
+        <div class="panel"><div class="label">Optimization</div>
+        <pre class="code">Original:\n${a?.optimization_suggestions?.code1_optimization||''}\n\nModified:\n${a?.optimization_suggestions?.code2_optimization||''}</pre></div>
+      `;
+      // Open result in new tab
+      const linkBtn = document.getElementById('open-result-link');
+      linkBtn.style.display = 'inline-block';
+      linkBtn.onclick = function() {
+        const win = window.open('', '_blank');
+        win.document.write(`
+          <html><body style="font-family:Inter,sans-serif;">
+          <h1>PL/SQL Code Compare (Enterprise)</h1>
+          <h2>Original</h2><pre>${p.code1||''}</pre>
+          <h2>Modified</h2><pre>${p.code2||''}</pre>
+          <h2>Visual Diff</h2><div>${a.diff_analysis?.mod_highlight_html||''}</div>
+          <h3>All Analysis JSON</h3>
+          <pre>${JSON.stringify(a, null, 2)}</pre>
+          </body></html>
+        `); win.document.close();
+      };
+    }
+    document.addEventListener("DOMContentLoaded", function(){
+      fetch('/api/compare/latest')
+        .then(r => r.ok ? r.json() : null)
+        .then(p => { if(p && p.type === "compare_result") { applyCompare(p); } });
+      document.getElementById("compareForm").onsubmit = function(e){
+        e.preventDefault();
+        const code1 = document.getElementById("code-orig").value;
+        const code2 = document.getElementById("code-mod").value;
+        fetch("/api/compare",{
+          method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({code1,code2})
+        }).then(r=>r.json()).then(applyCompare);
+      };
+    });
+  </script>
+</body>
+</html>

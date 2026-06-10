@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PL/SQL Analysis Result</title>
+  <!-- Latest compiled and minified CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <style>
+    body { font-family:Inter,sans-serif; background:#ffffff; margin:0;}
+    .container { max-width:900px; margin:36px auto; background:#fff; border-radius:10px; box-shadow:0 4px 40px #aaa3; padding:30px;}
+    .panel { margin-bottom:18px; background:#f2f4fc; border-radius:6px; padding:16px;;
+     }
+     .offcanvas{
+        width:700px !important;
+     }
+    .offcanvas .code{
+        height:calc(100vh - 130px) !important;
+     }
+     .offcanvas-title{
+  font-weight:700; color:#4538ca; font-size:16px;
+     }
+    .label { 
+        font-weight:700; color:#4538ca; font-size:16px; margin-bottom:6px;display: flex;
+    align-items: center; 
+
+    i{
+        font-size: 25px;
+    }
+}
+     .code.set{
+        height: calc(100vh - 210px);
+        overflow: auto;
+        margin: 0px 0px !important;
+     }
+    .code { background:#fff; border-radius:4px; font-family:monospace; padding:7px 9px; height: 90%; }
+    .added { background:rgba(34,197,94,0.18); padding:0 2px; border-radius:4px;}
+    .removed { background:rgba(239,68,68,0.18); padding:0 2px; border-radius:4px; text-decoration:line-through;}
+    h2.title{
+        font-size: 20px;
+    font-weight: 600;
+    background: #4538ca;
+    color: #fff;
+    padding: 16px 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid p-0">
+    <h2 class="title">PL/SQL Code Analysis Result</h2>
+    <div class="row m-0">
+        <div class="col-md-12 d-flex align-items-center justify-content-end">
+ <button class="btn " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasbusiness" aria-controls="offcanvasExample">
+   <div class="label"><i class="bi bi-briefcase me-2"></i>Business Impact</div>
+</button>
+ <button class="btn " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSummary" aria-controls="offcanvasExample">
+   <div class="label"><i class="bi bi-clipboard me-2"></i>Summary</div>
+</button>
+  <button class="btn " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOptimization" aria-controls="offcanvasExample">
+   <div class="label"><i class="bi bi-bookshelf me-2"></i>Optimization</div>
+</button>
+        </div>
+        <div class="col-md-4 col-12">
+<div class="panel"><div class="label">Original Code</div><pre class="code set">{{ code1 }}</pre></div>
+        </div>
+         <div class="col-md-4 col-12">
+ <div class="panel"><div class="label">Modified Code</div><pre class="code set">{{ code2 }}</pre></div>
+        </div>
+         <div class="col-md-4 col-12">
+  <div class="panel"><div class="label">Visual Diff</div><div class="code set" style="white-space:pre-line">{{ a.diff_analysis.mod_highlight_html | safe }}</div></div>
+        </div>
+  
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasbusiness" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header px-0">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Business Impact</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div>
+       <div class="panel"><pre class="code ">{{ a.business_impact.impact }}</pre></div>
+    </div>
+   
+  </div>
+</div>
+    
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasSummary" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header px-0">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Summary</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div>
+       <div class="panel"><pre class="code">{{ a.diff_analysis.summary }}</pre></div>
+    </div>
+   
+  </div>
+</div>
+  
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasOptimization" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header px-0">
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div>
+      <div class="panel">
+     <pre class="code">Original:\n{{ a.optimization_suggestions.code1_optimization }}\n\nModified:\n{{ a.optimization_suggestions.code2_optimization }}</pre></div>
+      </div>
+    </div>
+   
+  </div>
+</div>
+   
+  </div>
+</body>
+</html>

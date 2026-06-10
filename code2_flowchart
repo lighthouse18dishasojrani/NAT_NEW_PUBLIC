@@ -1,0 +1,15 @@
+digraph {
+	rankdir=TB
+	node [color=lightgrey fontname=Courier shape=box style=filled]
+	step0 [label="Step 1: Input parameters a_entity_code, a_tcode, a_tnature, and a_acc_year are passed into the proc_nafhead procedure."]
+	step1 [label="Step 2: The L_DECIMAL variable is calculated as lhs4_client.GET_AMT_DECIMAL(a_entity_code) and used to initialize L_SUM_AFIELD1 and L_TOTAL_AMT variables."]
+	step2 [label="Step 3: The l_yrbegdate and L_YRENDDATE variables are retrieved from the acc_year_mast table based on a_entity_code and a_acc_year, and then used to filter C_P cursor results."]
+	step3 [label="Step 4: For each row in C_VR cursor, the L_SUM_AFIELD1 variable is recalculated as the sum of AFIELD1 values from itemTRAN_BODY table for the corresponding entity_code, tcode, and vrno. Then, L_TOTAL_AMT is reset to 0."]
+	step4 [label="Step 5: Within each iteration of the inner loop (C2), L_AMT is calculated as the average of I.NAFIELD and J.AFIELD1 values, and then added to L_TOTAL_AMT with a rolling sum."]
+	step5 [label="Step 6: The final value of L_TOTAL_AMT is not used anywhere; the procedure only loops through the rows in C_VR cursor once."]
+	step0 -> step1
+	step1 -> step2
+	step2 -> step3
+	step3 -> step4
+	step4 -> step5
+}

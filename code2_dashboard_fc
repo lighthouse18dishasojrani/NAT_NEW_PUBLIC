@@ -1,0 +1,27 @@
+digraph {
+	rankdir=TB
+	node [color=lightgrey fontname=Courier shape=box style=filled]
+	step0 [label="Step 1: Input parameters a_entity_code, a_tcode, a_acc_year, and a_tnature are passed into the procedure proc_nafhead."]
+	step1 [label="Step 2: The L_DECIMAL variable is calculated as GET_AMT_DECIMAL(a_entity_code) from lhs4_client."]
+	step2 [label="Step 3: CURSOR C_VR is defined, selecting data from NAFHEAD_TRAN based on input parameters and returning ENTITY_CODE, TCODE, VRNO, NAFHEAD, and NAFIELD."]
+	step3 [label="Step 4: The L_YRBEGDATE and L_YRENDDATE variables are calculated by selecting values from acc_year_mast where entity_code = a_entity_code and acc_year = a_acc_year."]
+	step4 [label="Step 5: For each row in C_VR, the following steps occur:"]
+	step5 [label="Step 5.1: CURSOR C_P is defined, selecting data from NAFHEAD_TRAN based on input parameters and row values from C_VR, returning ENTITY_CODE, TCODE, VRNO, NAFHEAD, NAFIELD, FROM_DATE, and TO_DATE."]
+	step6 [label="Step 5.2: The L_AMT variable is calculated by summing AFIELD1 from itemTRAN_BODY where entity_code = I.ENTITY_CODE, tcode = I.TCODE, and vrno = I.VRNO."]
+	step7 [label="Step 3: The L_TOTAL_AMT variable is initialized to 0."]
+	step8 [label="Step 6: For each row in C2 (CURSOR C2), the following steps occur:"]
+	step9 [label="Step 6.1: The L_SLNO variable is set to J.SLNO from CURSOR C2."]
+	step10 [label="Step 6.2: The L_AMT variable is calculated as the sum of I.NAFIELD and J.AFIELD1 divided by L_SUM_AFIELD1, rounded to L_DECIMAL precision."]
+	step11 [label="Step 7: The L_TOTAL_AMT variable is incremented by NVL(L_TOTAL_AMT, 0) + NVL(L_AMT, 0)."]
+	step0 -> step1
+	step1 -> step2
+	step2 -> step3
+	step3 -> step4
+	step4 -> step5
+	step5 -> step6
+	step6 -> step7
+	step7 -> step8
+	step8 -> step9
+	step9 -> step10
+	step10 -> step11
+}

@@ -1,0 +1,15 @@
+digraph {
+	rankdir=TB
+	node [color=lightgrey fontname=Courier shape=box style=filled]
+	step0 [label="Step 1: Input parameters a_entity_code, a_tcode, a_tnature, and a_acc_year are passed into proc_nafhead procedure."]
+	step1 [label="Step 2: L_DECIMAL is derived from lhs4_client.GET_AMT_DECIMAL(a_entity_code) and used in the calculation of L_SLNO later."]
+	step2 [label="Step 3: Cursors C_VR and C_P are defined, querying NAFHEAD_TRAN table based on input parameters. Data flows into these cursors."]
+	step3 [label="Step 4: YRBEGDATE and YRENDATA are derived from acc_year_mast table, filtered by entity_code and acc_year. These values flow into the calculation of L_SLNO."]
+	step4 [label="Step 5: FOR loop iterates over C_VR cursor. For each iteration, SUM(AFIELD1) is calculated for itemTRAN_BODY table based on ENTITY_CODE, TCODE, and VRNO. This value flows into L_SUM_AFIELD1."]
+	step5 [label="Step 6: FOR loop inside proc_nafhead iterates over C2 cursor. For each iteration, AFIELD1 and vrdate are retrieved from itemTRAN_BODY table. AFIELD1 is used to calculate L_AMT based on I.NAFIELD, L_SUM_AFIELD1, and L_DECIMAL. L_TOTAL_AMT is calculated by summing up NVL(L_TOTAL_AMT, 0) and NVL(L_AMT, 0)."]
+	step0 -> step1
+	step1 -> step2
+	step2 -> step3
+	step3 -> step4
+	step4 -> step5
+}

@@ -1,0 +1,12 @@
+digraph {
+	rankdir=TB
+	node [color=lightblue fontname=Arial fontsize=10 margin=0.1 shape=box style=filled]
+	edge [arrowhead=vee color=darkblue]
+	step0 [label="Step 1: Initialize variables from input paramet..."]
+	step1 [label="Step 2: Retrieve account year details and dates..."]
+	step2 [label="Step 3: Loop through VR data, calculate AFIELD1..."]
+	step3 [label="Step 4: Calculate individual item amounts using..."]
+	step0 -> step1
+	step1 -> step2
+	step2 -> step3
+}

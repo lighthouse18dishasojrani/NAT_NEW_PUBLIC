@@ -1,0 +1,7 @@
+python-dotenv
+requests
+fpdf
+fastapi
+uvicorn
+pydantic
+jinja2 
